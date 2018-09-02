@@ -8,15 +8,9 @@
 
 class db_connect
 {
-    public $conn = '';
+    private $conn;
 
-    function __construct()
-    {
-    }
-
-    function __destruct()
-    {
-        $this->close();
+    function __construct(){
     }
 
     function connect(){
@@ -35,9 +29,5 @@ class db_connect
         }
 
         return $this->conn;
-    }
-
-    function close(){
-        $this->conn->close;
     }
 }
