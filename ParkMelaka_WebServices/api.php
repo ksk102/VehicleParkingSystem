@@ -16,7 +16,12 @@ function isTheseParametersAvailable($params){
     foreach($params as $param){
         if(!isset($_POST[$param]) || strlen($_POST[$param])<=0){
             $available = false;
-            $missingparams = $missingparams . ", " . $param;
+            if($missingparams == ""){
+                $missingparams = $param;
+            }
+            else{
+                $missingparams = $missingparams . " & " . $param;
+            }
         }
     }
 
@@ -24,7 +29,7 @@ function isTheseParametersAvailable($params){
     if(!$available){
         $response = array();
         $response['success'] = 0;
-        $response['message'] = 'Parameters ' . substr($missingparams, 1, strlen($missingparams)) . ' missing';
+        $response['message'] = substr($missingparams, 0, strlen($missingparams)) . ' is required';
 
         //displaying error
         echo json_encode($response);
@@ -51,11 +56,18 @@ if(isset($_GET['api'])){
             require_once 'users.php';
             $users = new users();
 
-            $response["success"] = 1;
-            $response['message'] = 'Credentials Checked';
-            $response["user_exist"] = $users->getUserPassword(
-                $_POST['email'],
-                $_POST['password']);
+            $success = "1";
+            $user_exists = $users->getUserPassword($_POST['email'], $_POST['password']);
+
+            $response["success"] = $success;
+            $response["user_exist"] = $user_exists;
+
+            if($user_exists){
+                $response['message'] = 'Login Successful';
+            }
+            else{
+                $response['message'] = 'Login Failed! Please check your email and password again';
+            }
             
             break;
     }
