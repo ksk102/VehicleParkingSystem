@@ -29,16 +29,16 @@ class users
     * When this method is called it is returning the existing record of the database
     */
     function getUserPassword($user_email, $user_password){
-        $stmt = $this->conn->prepare("SELECT COUNT(1) AS count FROM users WHERE user_email=? AND user_password=?;");
+        $stmt = $this->conn->prepare("SELECT id FROM users WHERE user_email=? AND user_password=?;");
         $stmt->bind_param("ss",$user_email, $user_password);
         $stmt->execute();
 
         $result = $stmt->get_result();
         $stmt->close();
 
-        list($count) = $result->fetch_row();
+        list($id) = $result->fetch_row();
 
-        return $count;
+        return $id;
     }
 
     function getUserDetail($user_id){
