@@ -70,6 +70,17 @@ if(isset($_GET['api'])){
             }
             
             break;
+
+        case 'getUserDetail':
+            isTheseParametersAvailable(array('userid'));
+
+            require_once 'users.php';
+            $users = new users();
+
+            $response['success'] = "1";
+            $response['user_detail'] = $users->getUserDetail($_POST['userid']);
+
+            break;
     }
 
 }

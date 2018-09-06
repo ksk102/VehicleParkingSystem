@@ -40,4 +40,19 @@ class users
 
         return $count;
     }
+
+    function getUserDetail($user_id){
+        $stmt = $this->conn->prepare("SELECT id, user_email, user_name, user_balance, car_plate_number FROM users WHERE id=?;");
+        $stmt->bind_param("s",$user_id);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        $stmt->close();
+
+        $user  = array();
+
+        list($user['id'], $user['email'], $user['user_name'], $user['user_balance'], $user['car_number']) = $result->fetch_row();
+
+        return $user;
+    }
 }
