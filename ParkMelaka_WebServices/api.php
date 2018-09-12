@@ -81,6 +81,17 @@ if(isset($_GET['api'])){
             $response['user_detail'] = $users->getUserDetail($_POST['userid']);
 
             break;
+
+        case 'getLocation':
+            require_once 'location.php';
+            $loc = new location();
+
+            $response['success'] = "1";
+            $response['callback'] = "getLocation";
+            $response['message'] = 'Request successfully completed';
+            $response['locations'] = $loc->getLocation("MPHTJ", "Melaka");
+
+            break;
     }
 
 }
