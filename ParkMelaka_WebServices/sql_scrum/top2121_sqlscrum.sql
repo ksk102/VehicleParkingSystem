@@ -37,5 +37,16 @@ VALUES ("Bukit Beruang", "MPHTJ", "Melaka"),
        ("Kota Laksamana", "MBMB", "Melaka"),
        ("Bukit Baru", "MPHTJ", "Melaka");
 
-INSERT INTO users (user_email, user_password, user_name, user_balance, car_plate_number)
-VALUES ("q", "q", "Koh Kah Siang", 101.60, "JMM5199");
+/*20180912 added by kskoh*/
+/* create transaction table */
+CREATE TABLE IF NOT EXISTS transaction(
+  id INT(11) AUTO_INCREMENT PRIMARY KEY,
+  trans_user_id VARCHAR(255) NOT NULL,
+  trans_active VARCHAR(255) NOT NULL,
+  trans_start DATE NOT NULL,
+  trans_starttime char(5),
+  trans_end DATE,
+  trans_endtime char(5),
+  trans_loc INT(11) NOT NULL,
+  trans_amount DECIMAL(10,2)
+);

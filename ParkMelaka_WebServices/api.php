@@ -92,8 +92,30 @@ if(isset($_GET['api'])){
             $response['locations'] = $loc->getLocation("MPHTJ", "Melaka");
 
             break;
-    }
 
+        case 'startTransaction':
+            isTheseParametersAvailable(array('user_id', 'parking_location'));
+
+            require_once 'transaction.php';
+            $trans = new transaction();
+
+            $result = $trans->startTransaction(
+                $_POST['user_id'],
+                $_POST['parking_location']
+            );
+
+            $response['callback'] = "startTransaction";
+
+            if($result){
+                $response['success'] = "1";
+                $response['message'] = 'Transaction started successfully';
+            }else{
+                $response['success'] = "0";
+                $response['message'] = 'Some error occurred please try again';
+            }
+
+            break;
+    }
 }
 else{
     //if it is not api call
