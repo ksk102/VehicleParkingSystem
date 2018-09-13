@@ -115,6 +115,24 @@ if(isset($_GET['api'])){
             }
 
             break;
+
+        case 'endTransaction':
+            isTheseParametersAvailable(array('user_id'));
+
+            require_once 'transaction.php';
+            $trans = new transaction();
+
+            $response['callback'] = "endTransaction";
+            $response['success'] = "1";
+            $response['message'] = 'Transaction ended';
+            $response['time'] = $trans->endTransaction($_POST['user_id']);
+
+            if($response['time'] == null){
+                $response['success'] = "0";
+                $response['message'] = 'Some error occurred please try again';
+            }
+
+            break;
     }
 }
 else{

@@ -11,6 +11,8 @@ class db_connect
     private $conn;
 
     function __construct(){
+        //set time zone
+        date_default_timezone_set("Asia/Kuala_Lumpur");
     }
 
     function connect(){
