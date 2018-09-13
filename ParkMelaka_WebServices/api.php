@@ -133,6 +133,25 @@ if(isset($_GET['api'])){
             }
 
             break;
+
+        case 'updateBalance':
+            isTheseParametersAvailable(array('userId', 'balance'));
+
+            require_once 'transaction.php';
+            $trans = new transaction();
+
+            $response['callback'] = "updateBalance";
+
+            if($trans->updateBalance($_POST['userId'], $_POST['balance'])){
+                $response['success'] = "1";
+                $response['message'] = 'Successfully updated balance';
+            }
+            else{
+                $response['success'] = "0";
+                $response['message'] = 'Database error';
+            }
+
+            break;
     }
 }
 else{

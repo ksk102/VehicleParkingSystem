@@ -77,4 +77,17 @@ class transaction
         }
         return null;
     }
+
+    function updateBalance($user_id, $balance){
+        $stmt = $this->conn->prepare("UPDATE users
+                                            SET user_balance = ?
+                                            WHERE id = ?;");
+
+        $stmt->bind_param("ss", $balance, $user_id);
+
+        if($stmt->execute()){
+            return true;
+        }
+        return false;
+    }
 }
