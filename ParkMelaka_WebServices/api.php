@@ -152,6 +152,18 @@ if(isset($_GET['api'])){
             }
 
             break;
+
+        case 'checkEmailExists':
+            isTheseParametersAvailable(array('email'));
+
+            require_once  'users.php';
+            $users = new users();
+
+            $response['callback'] = "checkEmailExists";
+            $response['success'] = '1';
+            $response['exists'] = $users->checkEmailExists($_POST['email']);
+
+            break;
     }
 }
 else{

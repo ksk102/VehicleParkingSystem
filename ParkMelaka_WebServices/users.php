@@ -55,4 +55,16 @@ class users
 
         return $user;
     }
-}
+
+    function checkEmailExists($email){
+        $stmt = $this->conn->prepare("SELECT COUNT(1) FROM users WHERE user_email = ?;");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        $stmt->close();
+
+        list($exists) = $result->fetch_row();
+
+        return $exists;
+    }
