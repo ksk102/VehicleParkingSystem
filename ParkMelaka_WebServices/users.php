@@ -30,6 +30,9 @@ class users
     */
     function getUserPassword($user_email, $user_password){
         $stmt = $this->conn->prepare("SELECT id FROM users WHERE user_email=? AND user_password=?;");
+
+        $user_password = md5($user_password);
+
         $stmt->bind_param("ss",$user_email, $user_password);
         $stmt->execute();
 
@@ -71,6 +74,9 @@ class users
 
     function createUser($name, $email, $password, $carPlate){
         $stmt = $this->conn->prepare("INSERT INTO users (user_email, user_password, user_name, user_balance, car_plate_number) VALUES (?, ?, ?, 0.00, ?);");
+
+        $password = md5($password);
+
         $stmt->bind_param("ssss", $email, $password, $name, $carPlate);
         if($stmt->execute()){
             return "1";
