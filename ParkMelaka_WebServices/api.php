@@ -70,8 +70,110 @@ if(isset($_GET['api'])){
             }
             
             break;
-    }
 
+        case 'getUserDetail':
+            isTheseParametersAvailable(array('userid'));
+
+            require_once 'users.php';
+            $users = new users();
+
+            $response['success'] = "1";
+            $response['user_detail'] = $users->getUserDetail($_POST['userid']);
+
+            break;
+
+        case 'getLocation':
+            require_once 'location.php';
+            $loc = new location();
+
+            $response['success'] = "1";
+            $response['callback'] = "getLocation";
+            $response['message'] = 'Request successfully completed';
+            $response['locations'] = $loc->getLocation("MPHTJ", "Melaka");
+
+            break;
+
+        case 'startTransaction':
+            isTheseParametersAvailable(array('user_id', 'parking_location'));
+
+            require_once 'transaction.php';
+            $trans = new transaction();
+
+            $result = $trans->startTransaction(
+                $_POST['user_id'],
+                $_POST['parking_location']
+            );
+
+            $response['callback'] = "startTransaction";
+
+            if($result){
+                $response['success'] = "1";
+                $response['message'] = 'Transaction started successfully';
+            }else{
+                $response['success'] = "0";
+                $response['message'] = 'Some error occurred please try again';
+            }
+
+            break;
+
+        case 'endTransaction':
+            isTheseParametersAvailable(array('user_id'));
+
+            require_once 'transaction.php';
+            $trans = new transaction();
+
+            $response['callback'] = "endTransaction";
+            $response['success'] = "1";
+            $response['message'] = 'Transaction ended';
+            $response['time'] = $trans->endTransaction($_POST['user_id']);
+
+            if($response['time'] == null){
+                $response['success'] = "0";
+                $response['message'] = 'Some error occurred please try again';
+            }
+
+            break;
+
+        case 'updateBalance':
+            isTheseParametersAvailable(array('userId', 'balance'));
+
+            require_once 'transaction.php';
+            $trans = new transaction();
+
+            $response['callback'] = "updateBalance";
+
+            if($trans->updateBalance($_POST['userId'], $_POST['balance'])){
+                $response['success'] = "1";
+                $response['message'] = 'Successfully updated balance';
+            }
+            else{
+                $response['success'] = "0";
+                $response['message'] = 'Database error';
+            }
+
+            break;
+
+        case 'checkEmailExists':
+            isTheseParametersAvailable(array('email'));
+
+            require_once  'users.php';
+            $users = new users();
+
+            $response['callback'] = "checkEmailExists";
+            $response['success'] = '1';
+            $response['exists'] = $users->checkEmailExists($_POST['email']);
+
+            break;
+
+        case 'createUser':
+            isTheseParametersAvailable(array('name', 'email', 'password', 'carPlate'));
+
+            require_once  'users.php';
+            $users = new users();
+
+            $response['callback'] = "createUser";
+            $response['success'] = $users->createUser($_POST['name'], $_POST['email'], $_POST['password'], $_POST['carPlate']);
+    }
 }
 else{
     //if it is not api call
