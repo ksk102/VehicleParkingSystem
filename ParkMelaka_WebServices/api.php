@@ -164,6 +164,15 @@ if(isset($_GET['api'])){
             $response['exists'] = $users->checkEmailExists($_POST['email']);
 
             break;
+
+        case 'createUser':
+            isTheseParametersAvailable(array('name', 'email', 'password', 'carPlate'));
+
+            require_once  'users.php';
+            $users = new users();
+
+            $response['callback'] = "createUser";
+            $response['success'] = $users->createUser($_POST['name'], $_POST['email'], $_POST['password'], $_POST['carPlate']);
     }
 }
 else{

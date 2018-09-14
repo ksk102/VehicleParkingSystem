@@ -68,3 +68,13 @@ class users
 
         return $exists;
     }
+
+    function createUser($name, $email, $password, $carPlate){
+        $stmt = $this->conn->prepare("INSERT INTO users (user_email, user_password, user_name, user_balance, car_plate_number) VALUES (?, ?, ?, 0.00, ?);");
+        $stmt->bind_param("ssss", $email, $password, $name, $carPlate);
+        if($stmt->execute()){
+            return "1";
+        }
+        return "0";
+    }
+}
