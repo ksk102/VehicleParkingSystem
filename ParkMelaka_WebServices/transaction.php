@@ -90,4 +90,45 @@ class transaction
         }
         return false;
     }
+
+    function updateCharges($user_id, $amount){
+        $stmt = $this->conn->prepare("UPDATE transaction SET trans_amount = ? WHERE trans_user_id = ? AND trans_amount IS NULL;");
+
+        $stmt->bind_param("ss", $amount, $user_id);
+
+        if($stmt->execute()){
+            return true;
+        }
+        return false;
+    }
+
+    function getHistoryList($userId){
+        $stmt = $this->conn->prepare("SELECT trans_user_id, trans_start, trans_starttime, trans_end, trans_endtime, loc_name, trans_amount, car_plate_number
+FROM transaction
+INNER JOIN location ON location.id = transaction.trans_loc
+INNER JOIN users ON users.id = transaction.trans_user_id
+WHERE trans_user_id = ? AND trans_active = 0
+ORDER BY trans_start DESC, trans_starttime DESC;");
+        $stmt->bind_param("s", $userId);
+        $stmt->execute();
+        $stmt->bind_result($id, $startDate, $startTime, $endDate, $endTime, $location, $amount, $carNo);
+
+        $histories = array();
+
+        while($stmt->fetch()){
+
+            $history  = array();
+            $history['id'] = $id;
+            $history['startDate'] = $startDate;
+            $history['startTime'] = $startTime;
+            $history['endDate'] = $endDate;
+            $history['endTime'] = $endTime;
+            $history['location'] = $location;
+            $history['amount'] = $amount;
+            $history['carNo'] = $carNo;
+
+            array_push($histories, $history);
+        }
+        return $histories;
+    }
 }

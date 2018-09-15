@@ -153,6 +153,25 @@ if(isset($_GET['api'])){
 
             break;
 
+        case 'updateCharges':
+            isTheseParametersAvailable(array('userId', 'amount'));
+
+            require_once 'transaction.php';
+            $trans = new transaction();
+
+            $response['callback'] = "updateCharges";
+
+            if($trans->updateCharges($_POST['userId'], $_POST['amount'])){
+                $response['success'] = "1";
+                $response['message'] = 'Successfully updated amount';
+            }
+            else{
+                $response['success'] = "0";
+                $response['message'] = 'Database error';
+            }
+
+            break;
+
         case 'checkEmailExists':
             isTheseParametersAvailable(array('email'));
 
@@ -173,6 +192,20 @@ if(isset($_GET['api'])){
 
             $response['callback'] = "createUser";
             $response['success'] = $users->createUser($_POST['name'], $_POST['email'], $_POST['password'], $_POST['carPlate']);
+
+            break;
+
+        case'getHistoryList':
+            isTheseParametersAvailable(array('userId'));
+
+            require_once 'transaction.php';
+            $trans = new transaction();
+
+            $response['callback'] = "getHistoryList";
+            $response['success'] = 1;
+            $response['historyList'] = $trans->getHistoryList($_POST['userId']);
+
+            break;
     }
 }
 else{
