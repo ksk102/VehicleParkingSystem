@@ -90,4 +90,32 @@ class transaction
         }
         return false;
     }
+
+    function getHistoryList($userId){
+        $stmt = $this->conn->prepare("SELECT trans_user_id, trans_start, trans_starttime, trans_end, trans_endtime, loc_name, trans_amount
+FROM transaction
+INNER JOIN location ON location.id = transaction.trans_loc
+WHERE trans_user_id = ?
+ORDER BY trans_start DESC, trans_starttime DESC;");
+        $stmt->bind_param("s", $userId);
+        $stmt->execute();
+        $stmt->bind_result($id, $startDate, $startTime, $endDate, $endTime, $location, $amount);
+
+        $histories = array();
+
+        while($stmt->fetch()){
+
+            $history  = array();
+            $history['id'] = $id;
+            $history['startDate'] = $startDate;
+            $history['startTime'] = $startTime;
+            $history['endDate'] = $endDate;
+            $history['endTime'] = $endTime;
+            $history['location'] = $location;
+            $history['amount'] = $amount;
+
+            array_push($histories, $history);
+        }
+        return $histories;
+    }
 }
