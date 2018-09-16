@@ -11,14 +11,8 @@ CREATE TABLE IF NOT EXISTS users(
   user_balance DECIMAL(6,2) NOT NULL
 );
 
-/*insert dummy data into users table*/
-DELETE FROM users;
-INSERT INTO users (user_email, user_password, user_name, user_balance)
-VALUES ("kahsiang95@hotmail.com", "123456", "KS Koh", 0.00);
-
 /*add plate_number field to the users table*/
 ALTER TABLE users ADD COLUMN car_plate_number VARCHAR(10);
-
 
 /*20180911 added by kskoh*/
 /* create location table */
@@ -50,3 +44,20 @@ CREATE TABLE IF NOT EXISTS transaction(
   trans_loc INT(11) NOT NULL,
   trans_amount DECIMAL(10,2)
 );
+
+/*create db*/
+CREATE DATABASE IF NOT EXISTS parkmelaka_admin;
+USE parkmelaka_admin;
+
+/*create admin table*/
+CREATE TABLE IF NOT EXISTS admin(
+  id INT(11) AUTO_INCREMENT PRIMARY KEY,
+  admin_ID VARCHAR(255) NOT NULL,
+  admin_password VARCHAR(255) NOT NULL,
+  admin_name VARCHAR(255)
+);
+
+/*insert dummy data into admin table*/
+DELETE FROM admin;
+INSERT INTO admin (admin_ID, admin_password, admin_name)
+VALUES ("1121100123", "123456", "KS Koh");
