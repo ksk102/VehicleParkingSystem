@@ -83,4 +83,14 @@ class users
         }
         return "0";
     }
+	
+	function requestTopUp($amount,$email){
+        $stmt = $this->conn->prepare("UPDATE users SET user_top_up = ? WHERE user_email = ?;");
+
+        $stmt->bind_param("is", $amount, $email);
+        if($stmt->execute()){
+            return "1";
+        }
+        return "0";
+    }
 }

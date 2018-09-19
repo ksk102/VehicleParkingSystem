@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS users(
 
 /*add plate_number field to the users table*/
 ALTER TABLE users ADD COLUMN car_plate_number VARCHAR(10);
+ALTER TABLE users ADD COLUMN user_top_up DECIMAL(6,2);
 
 /*20180911 added by kskoh*/
 /* create location table */

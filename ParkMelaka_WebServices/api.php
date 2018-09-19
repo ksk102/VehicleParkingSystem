@@ -28,6 +28,7 @@ function isTheseParametersAvailable($params){
     //if parameters are missing
     if(!$available){
         $response = array();
+		$response['callback'] = "Error111";
         $response['success'] = 0;
         $response['message'] = substr($missingparams, 0, strlen($missingparams)) . ' is required';
 
@@ -195,7 +196,7 @@ if(isset($_GET['api'])){
 
             break;
 
-        case'getHistoryList':
+        case 'getHistoryList':
             isTheseParametersAvailable(array('userId'));
 
             require_once 'transaction.php';
@@ -206,11 +207,23 @@ if(isset($_GET['api'])){
             $response['historyList'] = $trans->getHistoryList($_POST['userId']);
 
             break;
+			
+		case 'topUp':
+            isTheseParametersAvailable(array('amount', 'email'));
+
+            require_once 'users.php';
+            $users = new users();
+			
+            $response['callback'] = "topUp";
+            $response['success'] = $users->requestTopUp($_POST['amount'], $_POST['email']);
+
+            break;
     }
 }
 else{
     //if it is not api call
     //pushing appropriate values to response array
+	$response['callback'] = "Error";
     $response['error'] = true;
     $response['message'] = 'Invalid API Call';
 }
