@@ -29,10 +29,10 @@ class location
     * The read operation
     * When this method is called it is returning the existing record of the database
     */
-    function getLocation($loc_council, $loc_state)
+    function getLocation($loc_state)
     {
-        $stmt = $this->conn->prepare("SELECT id, loc_name FROM location WHERE loc_council=? AND loc_state=?;");
-        $stmt->bind_param("ss", $loc_council, $loc_state);
+        $stmt = $this->conn->prepare("SELECT id, loc_name FROM location WHERE loc_state=?;");
+        $stmt->bind_param("s",$loc_state);
         $stmt->execute();
         $stmt->bind_result($id, $loc);
 

@@ -90,7 +90,7 @@ if(isset($_GET['api'])){
             $response['success'] = "1";
             $response['callback'] = "getLocation";
             $response['message'] = 'Request successfully completed';
-            $response['locations'] = $loc->getLocation("MPHTJ", "Melaka");
+            $response['locations'] = $loc->getLocation("Melaka");
 
             break;
 
