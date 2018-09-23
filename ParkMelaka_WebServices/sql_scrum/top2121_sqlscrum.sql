@@ -11,14 +11,8 @@ CREATE TABLE IF NOT EXISTS users(
   user_balance DECIMAL(6,2) NOT NULL
 );
 
-/*insert dummy data into users table*/
-DELETE FROM users;
-INSERT INTO users (user_email, user_password, user_name, user_balance)
-VALUES ("kahsiang95@hotmail.com", "123456", "KS Koh", 0.00);
-
 /*add plate_number field to the users table*/
 ALTER TABLE users ADD COLUMN car_plate_number VARCHAR(10);
-
 
 /*20180911 added by kskoh*/
 /* create location table */
@@ -50,3 +44,13 @@ CREATE TABLE IF NOT EXISTS transaction(
   trans_loc INT(11) NOT NULL,
   trans_amount DECIMAL(10,2)
 );
+
+/*add user top up for top up request*/
+ALTER TABLE users ADD COLUMN user_top_up DECIMAL(6,2);
+
+/*eye rolling*/
+ALTER TABLE location
+CHANGE COLUMN id trans_loc_id INT(11);
+
+ALTER TABLE transaction
+CHANGE COLUMN trans_loc trans_loc_id INT(11);
