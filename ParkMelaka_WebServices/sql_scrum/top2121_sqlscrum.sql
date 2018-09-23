@@ -45,19 +45,12 @@ CREATE TABLE IF NOT EXISTS transaction(
   trans_amount DECIMAL(10,2)
 );
 
-/*create db*/
-CREATE DATABASE IF NOT EXISTS parkmelaka_admin;
-USE parkmelaka_admin;
+/*add user top up for top up request*/
+ALTER TABLE users ADD COLUMN user_top_up DECIMAL(6,2);
 
-/*create admin table*/
-CREATE TABLE IF NOT EXISTS admin(
-  id INT(11) AUTO_INCREMENT PRIMARY KEY,
-  admin_ID VARCHAR(255) NOT NULL,
-  admin_password VARCHAR(255) NOT NULL,
-  admin_name VARCHAR(255)
-);
+/*eye rolling*/
+ALTER TABLE location
+CHANGE COLUMN id trans_loc_id INT(11);
 
-/*insert dummy data into admin table*/
-DELETE FROM admin;
-INSERT INTO admin (admin_ID, admin_password, admin_name)
-VALUES ("1121100123", "123456", "KS Koh");
+ALTER TABLE transaction
+CHANGE COLUMN trans_loc trans_loc_id INT(11);

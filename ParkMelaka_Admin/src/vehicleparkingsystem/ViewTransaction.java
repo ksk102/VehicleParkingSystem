@@ -23,6 +23,7 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER;
@@ -36,11 +37,8 @@ import javax.swing.SwingConstants;
 public class ViewTransaction {
     
     private final Font myFont2 = new Font("Serif",Font.PLAIN,18);
-    private final Font myFont = new Font("Serif",Font.PLAIN,24);
-    private final DbConnect transactionsDb;
     
     public ViewTransaction() {
-        transactionsDb = new DbConnect();
     }
     
     public JPanel showTransactions(JFrame f) throws ParseException {
@@ -53,8 +51,8 @@ public class ViewTransaction {
         if(data!= null) {
             dataExisted = true;
         }
-        Statement stmt = transactionsDb.userDbConnect();
-        Statement stmt2 = transactionsDb.userDbConnect();
+        Statement stmt = DbConnect.userDbConnect();
+        Statement stmt2 = DbConnect.userDbConnect();
         JPanel transactionPanel = new JPanel();
         JPanel transactions = new JPanel();
         transactions.setLayout(new GridBagLayout());
@@ -222,7 +220,7 @@ public class ViewTransaction {
                 case "Kota Laksamana":
                     specificLocation = "4";
                     break;
-                case "Batu Baru":
+                case "Bukit Baru":
                     specificLocation = "5";
                     break;
                 default:
@@ -248,11 +246,11 @@ public class ViewTransaction {
         try {
             if(dataExisted) {
                 if(!"0".equals(specificLocation) && !"0".equals(amountOrder)) {
-                    query = "select *  from transaction where trans_loc = "+ specificLocation + 
+                    query = "select *  from transaction where trans_loc_id = "+ specificLocation + 
                         " and trans_starttime >= '" + specificStartTime + "' and trans_endtime <= '" + 
                             specificEndTime +"' ORDER by trans_amount  " + amountOrder ;
                 }else if(!"0".equals(specificLocation) && "0".equals(amountOrder)){
-                    query = "select * from transaction where trans_loc = "+ specificLocation + 
+                    query = "select * from transaction where trans_loc_id = "+ specificLocation + 
                         " and trans_starttime >= '" + specificStartTime + "' and trans_endtime <= '" + 
                             specificEndTime +"' ORDER by trans_start DESC" ;
                 }else if("0".equals(specificLocation) && !"0".equals(amountOrder)){
@@ -269,6 +267,10 @@ public class ViewTransaction {
             
             ResultSet rs = stmt.executeQuery(query);
             while(rs.next()) {
+                if(rs.wasNull()) {
+                    JOptionPane.showMessageDialog(null,"No record found.","Null",JOptionPane.INFORMATION_MESSAGE);
+                    break;
+                }
                 String userId =null;
                 String trans_start=null;
                 String trans_end=null;
@@ -294,7 +296,7 @@ public class ViewTransaction {
                             amountDouble = round(amountDouble,2);
                             amount = String.format("%.2f",amountDouble);
                             try {
-                                queryLoc = "select * from location where id = " + location_id;
+                                queryLoc = "select * from location where trans_loc_id = " + location_id;
                                 ResultSet rs2 = stmt2.executeQuery(queryLoc);
                                 while(rs2.next()) {
                                     location = rs2.getString(2);
@@ -303,7 +305,7 @@ public class ViewTransaction {
                             catch(SQLException ex) {
                                 ex.printStackTrace();
                             }
-                        }
+                        } 
                     }
                     else {
                     userId = "   "+ rs.getString(2);
@@ -316,7 +318,7 @@ public class ViewTransaction {
                     amountDouble = round(amountDouble,2);
                     amount = String.format("%.2f",amountDouble);
                     try {
-                        queryLoc = "select * from location where id = " + location_id;
+                        queryLoc = "select * from location where trans_loc_id = " + location_id;
                         ResultSet rs2 = stmt2.executeQuery(queryLoc);
                         while(rs2.next()) {
                             location = rs2.getString(2);
@@ -337,7 +339,7 @@ public class ViewTransaction {
                     amountDouble = round(amountDouble,2);
                     amount = String.format("%.2f",amountDouble);
                     try {
-                        queryLoc = "select * from location where id = " + location_id;
+                        queryLoc = "select * from location where trans_loc_id = " + location_id;
                         ResultSet rs2 = stmt2.executeQuery(queryLoc);
                         while(rs2.next()) {
                             location = rs2.getString(2);
@@ -369,6 +371,9 @@ public class ViewTransaction {
                 ex.printStackTrace();
         }
         totalUsersString += Integer.toString(totalUsers);
+        if(totalUsers == 0) {
+            JOptionPane.showMessageDialog(null,"No record found.","Null",JOptionPane.INFORMATION_MESSAGE);
+        }
         totalAmountString += String.format("%.2f",totalAmount);
         JLabel totalUserLabel = new JLabel(totalUsersString);
         JLabel totalAmountLabel = new JLabel(totalAmountString);
@@ -380,9 +385,9 @@ public class ViewTransaction {
         wholePanel.add(new FilterTransactions(f));
         if(dataExisted) {
             wholePanel.add(constraintsPanel);
-            jsp.setPreferredSize(new Dimension(800,140));
+            jsp.setPreferredSize(new Dimension(790,140));
         } else {
-            jsp.setPreferredSize(new Dimension(800,180));
+            jsp.setPreferredSize(new Dimension(790,180));
         }
         transactionPanel.add(transactionLabel);
         transactionPanel.add(jsp);

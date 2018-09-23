@@ -89,7 +89,7 @@ if(isset($_GET['api'])){
             $response['success'] = "1";
             $response['callback'] = "getLocation";
             $response['message'] = 'Request successfully completed';
-            $response['locations'] = $loc->getLocation("MPHTJ", "Melaka");
+            $response['locations'] = $loc->getLocation("Melaka");
 
             break;
 
@@ -195,7 +195,7 @@ if(isset($_GET['api'])){
 
             break;
 
-        case'getHistoryList':
+        case 'getHistoryList':
             isTheseParametersAvailable(array('userId'));
 
             require_once 'transaction.php';
@@ -204,6 +204,17 @@ if(isset($_GET['api'])){
             $response['callback'] = "getHistoryList";
             $response['success'] = 1;
             $response['historyList'] = $trans->getHistoryList($_POST['userId']);
+
+            break;
+			
+		case 'createTopUpRequest':
+            isTheseParametersAvailable(array('amount', 'email'));
+
+            require_once 'transaction.php';
+            $trans = new transaction();
+			
+            $response['callback'] = "createTopUpRequest";
+            $response['success'] = $trans->createTopUpRequest($_POST['amount'], $_POST['email']);
 
             break;
     }
