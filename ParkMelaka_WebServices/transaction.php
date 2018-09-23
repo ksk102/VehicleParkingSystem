@@ -131,4 +131,14 @@ ORDER BY trans_start DESC, trans_starttime DESC;");
         }
         return $histories;
     }
+
+    function createTopUpRequest($amount,$email){
+        $stmt = $this->conn->prepare("UPDATE users SET user_top_up = ? WHERE user_email = ?;");
+
+        $stmt->bind_param("is", $amount, $email);
+        if($stmt->execute()){
+            return "1";
+        }
+        return "0";
+    }
 }

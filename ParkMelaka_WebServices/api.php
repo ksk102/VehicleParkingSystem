@@ -28,7 +28,6 @@ function isTheseParametersAvailable($params){
     //if parameters are missing
     if(!$available){
         $response = array();
-		$response['callback'] = "Error111";
         $response['success'] = 0;
         $response['message'] = substr($missingparams, 0, strlen($missingparams)) . ' is required';
 
@@ -208,14 +207,14 @@ if(isset($_GET['api'])){
 
             break;
 			
-		case 'topUp':
+		case 'createTopUpRequest':
             isTheseParametersAvailable(array('amount', 'email'));
 
-            require_once 'users.php';
-            $users = new users();
+            require_once 'transaction.php';
+            $trans = new transaction();
 			
-            $response['callback'] = "topUp";
-            $response['success'] = $users->requestTopUp($_POST['amount'], $_POST['email']);
+            $response['callback'] = "createTopUpRequest";
+            $response['success'] = $trans->createTopUpRequest($_POST['amount'], $_POST['email']);
 
             break;
     }
@@ -223,7 +222,6 @@ if(isset($_GET['api'])){
 else{
     //if it is not api call
     //pushing appropriate values to response array
-	$response['callback'] = "Error";
     $response['error'] = true;
     $response['message'] = 'Invalid API Call';
 }
