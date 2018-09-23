@@ -31,7 +31,7 @@ class location
     */
     function getLocation($loc_state)
     {
-        $stmt = $this->conn->prepare("SELECT id, loc_name FROM location WHERE loc_state=?;");
+        $stmt = $this->conn->prepare("SELECT trans_loc_id, loc_name FROM location WHERE loc_state=?;");
         $stmt->bind_param("s",$loc_state);
         $stmt->execute();
         $stmt->bind_result($id, $loc);

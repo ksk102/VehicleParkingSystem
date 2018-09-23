@@ -18,7 +18,7 @@ ALTER TABLE users ADD COLUMN user_top_up DECIMAL(6,2);
 /*20180911 added by kskoh*/
 /* create location table */
 CREATE TABLE IF NOT EXISTS location(
-  id INT(11) AUTO_INCREMENT PRIMARY KEY,
+  trans_loc_id INT(11) AUTO_INCREMENT PRIMARY KEY,
   loc_name VARCHAR(255) NOT NULL,
   loc_council VARCHAR(255) NOT NULL,
   loc_state VARCHAR(255)
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS transaction(
   trans_starttime char(5),
   trans_end DATE,
   trans_endtime char(5),
-  trans_loc INT(11) NOT NULL,
+  trans_loc_id INT(11) NOT NULL,
   trans_amount DECIMAL(10,2)
 );
 
