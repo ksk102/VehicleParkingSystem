@@ -16,7 +16,7 @@ A student project for TOP2121
 <br/>
 
 **For the User-end Mobile App**<br/>
--Get it from [ksk102/ParkMelaka](https://github.com/ksk102/ParkMelaka)
--It is built using Android Studio
+-Get it from [ksk102/ParkMelaka](https://github.com/ksk102/ParkMelaka)<br/>
+-It is built using Android Studio<br/>
 -Change the API configuration in ```Api.java```<br/>
 -Change the `````ROOT_URL````` to your IP address to point to your WebServices API, that mentioned above.<br/>
